@@ -1,7 +1,7 @@
 require "renet"
 require "multi_json"
 
-class GameOverseer
+module GameOverseer
   class Client
     CHAT = 0 # channel int. used for in-game chat
     WORLD= 1 # channel int. used for sending/receiving world state updates
@@ -12,7 +12,7 @@ class GameOverseer
       @host = host
       @port = port
       @compression = compression
-      
+
       @socket = ENet::Connection.new(host, port, 4, 0, 0)
       @socket.use_compression(compression)
       connect
@@ -36,8 +36,24 @@ class GameOverseer
       @socket.send_packet(message, reliable, channel_id)
     end
 
+    def handle_connect(method)
+      @socket.on_connection(method)
+    end
+
     def handle_packet(method)
-      # Do stuff
+      @socket.on_packet_receive(method)
+    end
+
+    def handle_disconnect(method)
+      @socket.on_disconnection(method)
+    end
+
+    def update(timeout = nil)
+      if timeout && timeout.is_a?(Integer)
+        @socket.update(timeout)
+      else
+        @socket.update
+      end
     end
   end
 end
