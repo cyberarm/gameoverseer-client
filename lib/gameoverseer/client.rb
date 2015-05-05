@@ -1,6 +1,10 @@
 require "renet"
 require "multi_json"
 
+require_relative "client/version"
+require_relative "client/service_manager"
+require_relative "client/service"
+
 module GameOverseer
   class Client
     CHAT = 0 # channel int. used for in-game chat
@@ -13,39 +17,61 @@ module GameOverseer
       @port = port
       @compression = compression
 
+      GameOverseer::Client.instance = self
+      @service_manager = ServerManager.new
+
       @socket = ENet::Connection.new(host, port, 4, 0, 0)
       @socket.use_compression(compression)
+      @socket.on_packet_receive(method(:handle_packet))
+
       connect
     end
 
+    def self.instance
+      @instance
+    end
+    def self.instance=instance
+      @instance = instance
+    end
+
     def connect(timeout = 1000) # default to 1 second
-      # TODO: gracefully attempt to connect to Server.
+      tries = 0
+      begin
+        @socket.connect(timeout)
+      rescue StandardError
+        tries+=1
+        retry unless tries > 3
+        raise if tries > 3
+      end
+    end
+
+    def handle_packet(data, channel)
+      ServiceManger.instance.handle_packet(data, channel)
     end
 
     def disconnect(timeout = 1000)
-      # TODO: Gracefully attempt to connect to Server.
+      tries = 0
+      begin
+        @socket.disconnect(timeout)
+      rescue StandardError
+        tries+=1
+        retry unless tries > 3
+        raise if tries > 3
+      end
     end
 
-    def send(channel, mode, hash, channel_id = WORLD, reliable = false)
-      # channel is a String
-      # mode is a ?
-      # hash is a Hash
-      # reliable is a Boolean
+    def transmit(channel, mode, data = nil, channel_id = CHAT, reliable = false)
+      raise "channel must be a String" unless channel.is_a?(String)
+      raise "mode must be a String"    unless mode.is_a?(String)
+      raise "data must be a Hash"      if not mode.is_a?(Hash) or mode != nil
+      raise "reliable must be a Boolean" unless mode.is_a?(TrueClass) or mode.is_a?(FalseClass)
 
-      message = MultiJson.dump({channel: channel, mode: mode, data: hash})
+      if mode
+        message = MultiJson.dump({channel: channel, mode: mode, data: data})
+      else
+        message = MultiJson.dump({channel: channel, mode: mode})
+      end
       @socket.send_packet(message, reliable, channel_id)
-    end
-
-    def handle_connect(method)
-      @socket.on_connection(method)
-    end
-
-    def handle_packet(method)
-      @socket.on_packet_receive(method)
-    end
-
-    def handle_disconnect(method)
-      @socket.on_disconnection(method)
     end
 
     def update(timeout = nil)

@@ -1,4 +1,4 @@
-# Gameoverseer::Client
+# GameOverseer::Client
 
 Client library for GameOverseer.
 

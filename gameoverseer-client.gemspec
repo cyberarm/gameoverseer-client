@@ -5,7 +5,7 @@ require 'gameoverseer/client/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "gameoverseer-client"
-  spec.version       = Gameoverseer::Client::VERSION
+  spec.version       = GameOverseer::Client::VERSION
   spec.authors       = ["Cyberarm"]
   spec.email         = ["matthewlikesrobots@gmail.com"]
   spec.summary       = %q{Client for GameOverseer.}
