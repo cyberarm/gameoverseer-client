@@ -1,6 +1,6 @@
 # Gameoverseer::Client
 
-TODO: Write a gem description
+Client library for GameOverseer.
 
 ## Installation
 
@@ -20,11 +20,18 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Simple example
+```ruby
+require "gameoverseer/client"
+
+client = GameOverseer::Client.new("localhost", 56789)
+client.send({channel: 'world', mode: 'connect', data: {access_token: "f2a..."}})
+client.disconnect
+```
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/gameoverseer-client/fork )
+1. Fork it ( https://github.com/cyberarm/gameoverseer-client/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
