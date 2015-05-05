@@ -18,7 +18,7 @@ module GameOverseer
       @compression = compression
 
       GameOverseer::Client.instance = self
-      @service_manager = ServerManager.new
+      @service_manager = ServiceManager.new
 
       @socket = ENet::Connection.new(host, port, 4, 0, 0)
       @socket.use_compression(compression)
@@ -63,10 +63,10 @@ module GameOverseer
     def transmit(channel, mode, data = nil, channel_id = CHAT, reliable = false)
       raise "channel must be a String" unless channel.is_a?(String)
       raise "mode must be a String"    unless mode.is_a?(String)
-      raise "data must be a Hash"      if not mode.is_a?(Hash) or mode != nil
-      raise "reliable must be a Boolean" unless mode.is_a?(TrueClass) or mode.is_a?(FalseClass)
+      raise "data must be a Hash"      unless data.is_a?(Hash) or data == nil
+      raise "reliable must be a Boolean" unless reliable.is_a?(TrueClass) or reliable.is_a?(FalseClass)
 
-      if mode
+      if data
         message = MultiJson.dump({channel: channel, mode: mode, data: data})
       else
         message = MultiJson.dump({channel: channel, mode: mode})
@@ -74,12 +74,8 @@ module GameOverseer
       @socket.send_packet(message, reliable, channel_id)
     end
 
-    def update(timeout = nil)
-      if timeout && timeout.is_a?(Integer)
-        @socket.update(timeout)
-      else
-        @socket.update
-      end
+    def update(timeout = 0)
+      @socket.update(timeout)
     end
   end
 end
