@@ -25,7 +25,7 @@ Simple example
 require "gameoverseer/client"
 
 client = GameOverseer::Client.new("localhost", 56789)
-client.send({channel: 'world', mode: 'connect', data: {access_token: "f2a..."}})
+client.transmit({channel: 'world', mode: 'connect', data: {access_token: "f2a..."}})
 client.disconnect
 ```
 
