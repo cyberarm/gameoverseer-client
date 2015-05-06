@@ -45,8 +45,17 @@ module GameOverseer
       end
     end
 
+    def online?
+      @socket.online?
+    end
+
+    def connected?
+      @socket.connected?
+    end
+
     def handle_packet(data, channel)
-      ServiceManger.instance.handle_packet(data, channel)
+      data = MultiJson.load(data)
+      ServiceManager.instance.handle_packet(data, channel)
     end
 
     def disconnect(timeout = 1000)

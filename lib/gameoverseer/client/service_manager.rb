@@ -2,9 +2,13 @@ module GameOverseer
   class Client
     class ServiceManager
       SERVICES = []
+      CHANNELS = []
 
       def initialize
         GameOverseer::Client::ServiceManager.instance = self
+        SERVICES.each do |s|
+          s.new
+        end
       end
 
       def self.instance
@@ -16,7 +20,7 @@ module GameOverseer
       end
 
       def register_channel(instance, string)
-        service = SERVICES.detect do |_service|
+        service = CHANNELS.detect do |_service|
           if _service[:channel] == string
             true
           end
@@ -24,7 +28,7 @@ module GameOverseer
 
         raise "channel '#{string}' in use by '#{service[:instance]}'" if service
 
-        SERVICE.push({instance: instance, channel: string})
+        CHANNELS.push({instance: instance, channel: string})
         return true
       end
 
@@ -32,7 +36,7 @@ module GameOverseer
         service_channel = data["channel"]
         # service_method  = data["mode"]
 
-        SERVICES.each do |service|
+        CHANNELS.each do |service|
           if service[:channel] == service_channel
             service[:instance].process_data(data, channel)
           end
