@@ -6,8 +6,10 @@ module GameOverseer
 
       def initialize
         GameOverseer::Client::ServiceManager.instance = self
-        SERVICES.each do |s|
-          s.new
+        SERVICES.each_with_index do |s, index|
+          if s.class == Class
+            SERVICES[index] = s.new
+          end
         end
       end
 

@@ -11,6 +11,7 @@ module GameOverseer
     WORLD= 1 # channel int. used for sending/receiving world state updates
     HANDSHAKE = 2 # channel int. used for authentication or similar purposes
     FAULT=3 # channel int. used to send/receive errors
+    attr_reader :socket
 
     def initialize(host = "localhost", port = 56789, compression = true)
       @host = host

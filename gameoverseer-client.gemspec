@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = GameOverseer::Client::VERSION
   spec.authors       = ["Cyberarm"]
   spec.email         = ["matthewlikesrobots@gmail.com"]
-  spec.summary       = %q{Client for GameOverseer.}
-  spec.description   = %q{Interface for GameOverseer, easily.}
+  spec.summary       = %q{Client library for GameOverseer.}
+  spec.description   = %q{Library for easily communicating with a GameOverseer server.}
   spec.homepage      = "https://github.com/cyberarm/gameoverseer-client"
   spec.license       = "MIT"
 
@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "renet"
+  spec.add_dependency "renet"#, "=< 0.2.0"
   spec.add_dependency "multi_json"
 
   spec.add_development_dependency "bundler", "~> 1.7"
