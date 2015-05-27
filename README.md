@@ -1,3 +1,6 @@
+[![Code Climate](https://codeclimate.com/github/cyberarm/gameoverseer-client/badges/gpa.svg)](https://codeclimate.com/github/cyberarm/gameoverseer-client)
+[![Inline docs](http://inch-ci.org/github/cyberarm/gameoverseer-client.svg?branch=master)](http://inch-ci.org/github/cyberarm/gameoverseer-client)
+
 # GameOverseer::Client
 
 Client library for GameOverseer.
