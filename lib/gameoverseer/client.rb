@@ -55,7 +55,8 @@ module GameOverseer
     end
 
     def handle_packet(data, channel)
-      data = MultiJson.load(data)
+      _data= data.chomp.strip
+      data = MultiJson.load(_data)
       ServiceManager.instance.handle_packet(data, channel)
     end
 
