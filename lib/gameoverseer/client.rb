@@ -1,5 +1,8 @@
 require "renet"
 require "multi_json"
+if defined?(Oj)
+  Oj.default_options = {mode: :strict}
+end
 
 require_relative "client/version"
 require_relative "client/service_manager"
